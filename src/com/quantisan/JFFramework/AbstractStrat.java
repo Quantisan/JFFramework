@@ -24,7 +24,6 @@ public abstract class AbstractStrat implements IStrategy, IName {
 	private IEnter enter;
 	private AbsRiskManager riskManager;
 	private AbsPositionManager positionManager;	
-	private ICleaner cleaner;
 	
 	@Override
 	public final void onBar(Instrument instrument, Period period, IBar askBar,
@@ -37,8 +36,7 @@ public abstract class AbstractStrat implements IStrategy, IName {
 		riskManager.checkDrawdown(this);
 		positionManager.checkPositions(instrument, period, askBar, bidBar);
 		if (riskManager.isNewPositionAllowed()) {
-			Sentiment sentiment = setup.calculate(instrument, 
-												period, askBar, bidBar);
+			Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);
 			if (sentiment != Sentiment.NEUTRAL)
 				enter.enterPosition(instrument, sentiment);
 		}
@@ -71,11 +69,11 @@ public abstract class AbstractStrat implements IStrategy, IName {
 	}
 
 	@Override
-	public final void onStop() throws JFException {		
-		if (this.posthoc) {
-			Analyzer.record(setup.getTag());
-		}
-		this.cleaner.onStop();
+	public void onStop() throws JFException {		
+//		if (this.posthoc) {
+//			Analyzer.record(setup.getTag());
+//		}
+//		this.cleaner.onStop();
 	}
 
 	/**
@@ -91,14 +89,6 @@ public abstract class AbstractStrat implements IStrategy, IName {
 	 */
 	public void setEnter(IEnter enter) {
 		this.enter = enter;
-	}
-
-	/**
-	 * @param cleaner the cleaner to set
-	 */
-	public void setCleaner(ICleaner cleaner) {
-		this.cleaner = cleaner;
-		Printer.println("Cleaner: " + this.cleaner.getName());
 	}
 
 	/**
