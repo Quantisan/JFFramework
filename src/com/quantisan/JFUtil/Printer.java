@@ -1,5 +1,11 @@
 package com.quantisan.JFUtil;
 
+/**
+ * JForex printing functions
+ * 
+ * @author plam
+ *
+ */
 public class Printer {
 	private Printer() {}
 	

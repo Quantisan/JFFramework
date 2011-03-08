@@ -9,7 +9,7 @@ import com.dukascopy.api.*;
 public enum JForexContext {
 	INSTANCE;
 	
-	protected IContext context;
+	private IContext context;
 	private IEngine engine;
 	private IConsole console;
 	private IHistory history;
@@ -57,6 +57,8 @@ public enum JForexContext {
 	}
 
 	/**
+	 * Access to JForex IIndicators
+	 * 
 	 * @return the indicators
 	 */
 	public static IIndicators getIndicators() {

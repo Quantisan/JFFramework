@@ -4,7 +4,7 @@ import com.dukascopy.api.*;
 import com.dukascopy.api.IEngine.OrderCommand;;
 
 /**
- * Order ticket information encapsulation class using <strong>Builder pattern</strong>.
+ * Order ticket information encapsulation class using Builder pattern.
  * 
  * Example:
  * <pre>
@@ -17,6 +17,12 @@ import com.dukascopy.api.IEngine.OrderCommand;;
  *
  */
 public class OrderTicket {
+	/**
+	 * Builder for OrderTicket
+	 * 
+	 * @author plam
+	 *
+	 */
 	public static class Builder {
 		// set default values here
 		// required parameters
