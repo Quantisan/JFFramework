@@ -6,7 +6,7 @@ import com.dukascopy.api.Period;
 import com.quantisan.JFFramework.Sentiment;
 
 public interface ICondition {
-	public Sentiment calculate(ISetup entry, Instrument instrument, 
+	public Sentiment calculate(AbsSetup entry, Instrument instrument, 
 						Period period, IBar askBar, IBar bidBar);
 	
 	/**

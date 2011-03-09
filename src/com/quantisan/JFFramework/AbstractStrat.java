@@ -11,16 +11,12 @@ import com.quantisan.JFUtil.*;
 public abstract class AbstractStrat implements IStrategy, IName {	
 	private final String version = "0.1 alpha";
 	
-	@Configurable("Minimum observing period")
-		public Period minPeriod = Period.ONE_MIN;
 	@Configurable("Risk Pct per Trade (0.0, 1.0]") 
 		public double riskPct = 0.002;
-	@Configurable("Max. Drawdown Pct (0.0, 1.0]") 
-		public double maxDrawdown = 0.01;
 	@Configurable("Record post-hoc trade data on exit")
 		public boolean posthoc = false;
 	
-	private ISetup setup;
+	private AbsSetup setup;
 	private IEnter enter;
 	private AbsRiskManager riskManager;
 	private AbsPositionManager positionManager;	
@@ -29,13 +25,11 @@ public abstract class AbstractStrat implements IStrategy, IName {
 	public final void onBar(Instrument instrument, Period period, IBar askBar,
 			IBar bidBar) throws JFException 
 	{
-		if (minPeriod.compareTo(period) > 0)	
-			return;		// skipping all periods small than minPeriod
 		
 		// TODO: multithread diff parts?
-		riskManager.checkDrawdown(this);
+		riskManager.checkRisk(this, instrument, period);
 		positionManager.checkPositions(instrument, period, askBar, bidBar);
-		if (riskManager.isNewPositionAllowed()) {
+		if (riskManager.isNewPositionAllowed(instrument, period)) {
 			Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);
 			if (sentiment != Sentiment.NEUTRAL)
 				enter.enterPosition(instrument, sentiment);
@@ -46,7 +40,7 @@ public abstract class AbstractStrat implements IStrategy, IName {
 	public final void onStart(IContext context) throws JFException {
 		JForexContext.setContext(context);
 		JForexAccount.setAccount(context.getAccount());
-		JForexAccount.setRiskPct(this.riskPct);
+		//JForexAccount.setRiskPct(this.riskPct);
 		Printer.println("-- Quantisan.com JFFramework v. " + this.version  + " --");
 		this.initialize();		
 		
@@ -68,20 +62,12 @@ public abstract class AbstractStrat implements IStrategy, IName {
 		JForexAccount.setAccount(account);
 	}
 
-	@Override
-	public void onStop() throws JFException {		
-//		if (this.posthoc) {
-//			Analyzer.record(setup.getTag());
-//		}
-//		this.cleaner.onStop();
-	}
-
 	/**
 	 * @param setup the setup to set
 	 */
-	public void setSetup(ISetup setup) {
+	public void setSetup(AbsSetup setup) {
 		this.setup = setup;
-		Printer.println("Entry: " + this.setup.getName());
+		Printer.println("Trading setup: " + this.setup.getName());
 	}
 
 	/**
@@ -89,6 +75,7 @@ public abstract class AbstractStrat implements IStrategy, IName {
 	 */
 	public void setEnter(IEnter enter) {
 		this.enter = enter;
+		Printer.println("Entry: " + this.enter.getName());
 	}
 
 	/**
@@ -96,7 +83,7 @@ public abstract class AbstractStrat implements IStrategy, IName {
 	 */
 	public void setRiskManager(AbsRiskManager riskManager) {
 		this.riskManager = riskManager;
-		Printer.println("Risk Manager: " + this.riskManager.getName());
+		Printer.println("Risk manager: " + this.riskManager.getName());
 	}
 
 	/**
@@ -104,16 +91,15 @@ public abstract class AbstractStrat implements IStrategy, IName {
 	 */
 	public void setPositionManager(AbsPositionManager positionManager) {
 		this.positionManager = positionManager;
-		Printer.println("Position Manager: " + this.positionManager.getName());
+		Printer.println("Position manager: " + this.positionManager.getName());
 	}
 
 	/**
 	 * Call in onStart() to initialize the various strategies.
-	 * @see {@link #setSetup(ISetup)}, 
+	 * @see {@link #setSetup(AbsSetup)}, 
 	 * {@link #setOrderManager(AbsPositionManager)}, 
 	 * {@link #setRiskManager(AbsRiskManager)},
 	 * {@link IStrategy#onStart(IContext)},
-	 * {@link AbstractStrat#setCleaner(ICleaner)}
 	 */
 	public abstract void initialize();
 

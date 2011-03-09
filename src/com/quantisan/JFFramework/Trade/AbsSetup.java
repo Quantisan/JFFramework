@@ -8,14 +8,31 @@ import com.quantisan.JFFramework.ITag;
 import com.quantisan.JFFramework.Sentiment;
 
 /**
+ * Chain of Responsibilities pattern.
  * 
- * It is suggested to use State Pattern for this implementation.
+ * 
  * 
  * @author Paul Lam
  */
-public interface ISetup extends IName, ITag {
+public abstract class AbsSetup implements IName, ITag {
+	private AbsSetup next;
+	
+	public void setNext (AbsSetup successor) {
+		this.next = successor;
+	}
+	
 	// TODO implement with simple conditional statements of a set of ICondition
 	//		filter instrument and period here for each condition
-	public Sentiment calculate(Instrument instrument, Period period, 
+	/**
+	 * It is suggested to use State Pattern with {@link IEnter}.
+	 * 
+	 * @param instrument
+	 * @param period
+	 * @param askBar
+	 * @param bidBar
+	 * @return
+	 */
+	public abstract Sentiment calculate(Instrument instrument, Period period, 
 						IBar askBar, IBar bidBar);	
+	
 }

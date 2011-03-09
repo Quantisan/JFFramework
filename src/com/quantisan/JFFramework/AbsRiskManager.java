@@ -1,42 +1,31 @@
 package com.quantisan.JFFramework;
 
-import com.quantisan.JFUtil.JForexAccount;
+import com.dukascopy.api.*;
 
-public abstract class AbsRiskManager implements IName {
+/**
+ * Risk manager template
+ * 
+ * @author plam
+ *
+ */
+public abstract class AbsRiskManager implements IName, ITag {
+	// NOTE: this abs class seem to be made to check DD only...
+	// TODO remove DD focused algo and use CofR, read max DD val from file
 	private double maxDD;
+	private AbsRiskManager next;
 	
-	public AbsRiskManager(double maxDrawdown) {
-		this.setMaxDrawDown(maxDrawdown);
+	public void setNext(AbsRiskManager successor) {
+		this.next = successor;
 	}
 
-	public abstract boolean isNewPositionAllowed();
-	
-	/**
-	 * @param maxDrawdown the maxDD to set
-	 */
-	public void setMaxDrawDown(double maxDrawdown) {
-		this.maxDD = maxDrawdown;
-	}
+	public abstract boolean isNewPositionAllowed(Instrument instrument, Period period);
 
 	/**
-	 * Check to see if the current drawdown is beyond the max. drawdown limit.
+	 * Check risk
 	 * 
-	 * @param period
 	 * @param strategy
+	 * @param instrument
+	 * @param period
 	 */
-	public void checkDrawdown(AbstractStrat strategy) {
-		if (JForexAccount.isMaxDrawdownBroken(this.maxDD))
-			this.drawDownBroken(strategy);
-	}
-
-	/**
-	 * Called when max. drawdown is broken.  
-	 * Implement drawdown risk control here.
-	 */
-	protected abstract void drawDownBroken(AbstractStrat strategy);
-
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract void checkRisk(AbstractStrat strategy, Instrument instrument, Period period);
 }
