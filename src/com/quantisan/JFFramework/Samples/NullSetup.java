@@ -3,8 +3,8 @@ package com.quantisan.JFFramework.Samples;
 import com.dukascopy.api.IBar;
 import com.dukascopy.api.Instrument;
 import com.dukascopy.api.Period;
+import com.quantisan.JFFramework.AbsSetup;
 import com.quantisan.JFFramework.Sentiment;
-import com.quantisan.JFFramework.Trade.AbsSetup;
 
 /**
  * A Singleton setup that does nothing.
@@ -18,7 +18,7 @@ public class NullSetup extends AbsSetup {
 	private NullSetup() {};
 	
 	@Override
-	public String getName() {
+	public String toString() {
 		return "Null Setup";
 	}
 
@@ -41,7 +41,7 @@ public class NullSetup extends AbsSetup {
 	}
 
 	@Override
-	public void initialize(Instrument instrument) {	
+	public void initializeConditions(Instrument instrument) {	
 	}
 
 }

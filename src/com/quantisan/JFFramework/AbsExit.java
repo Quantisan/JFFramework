@@ -10,7 +10,7 @@ import com.dukascopy.api.Period;
  * @author plam
  *
  */
-public abstract class AbsExit implements IName {
+public abstract class AbsExit implements ITag{
 	private AbsExit next;
 	
 	public void setNext(AbsExit successor) {
@@ -20,5 +20,7 @@ public abstract class AbsExit implements IName {
 	public abstract void checkPositions(Instrument instrument, 
 									Period period, IBar askBar,
 									IBar bidBar);
+	
+	@Override public abstract String toString();
 
 }

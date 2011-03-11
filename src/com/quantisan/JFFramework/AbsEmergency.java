@@ -8,7 +8,7 @@ import com.dukascopy.api.*;
  * @author plam
  *
  */
-public abstract class AbsEmergency implements IName, ITag {
+public abstract class AbsEmergency implements ITag {
 	// NOTE: this abs class seem to be made to check DD only...
 	// TODO remove DD focused algo and use CofR, read max DD val from file
 	private double maxDD;
@@ -34,4 +34,6 @@ public abstract class AbsEmergency implements IName, ITag {
 	public void setMaxDD(double maxDD) {
 		this.maxDD = maxDD;
 	}
+	
+	@Override public abstract String toString();
 }

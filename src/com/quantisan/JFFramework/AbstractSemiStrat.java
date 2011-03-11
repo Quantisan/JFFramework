@@ -8,7 +8,7 @@ import com.quantisan.JFUtil.*;
  * @author Paul Lam
  *
  */
-public abstract class AbstractSemiStrat implements IStrategy, IName {	
+public abstract class AbstractSemiStrat implements IStrategy, ITag {	
 	private final String version = "0.1 alpha";
 	
 	@Configurable("Instrument")
@@ -23,7 +23,7 @@ public abstract class AbstractSemiStrat implements IStrategy, IName {
 		public boolean posthoc = false;
 	
 	private AbsSetup setup;
-	private IEnter enter;
+	private AbsEnter enter;
 	private AbsEmergency emergency;
 	private IExposure exposure;
 	private AbsExit exit;	
@@ -51,15 +51,17 @@ public abstract class AbstractSemiStrat implements IStrategy, IName {
 		//JForexAccount.setRiskPct(this.riskPct);
 		Printer.println("-- Quantisan.com JFFramework v. " + this.version  + " --");
 		// TODO move validation check into class and expand on functionality
-		if (!JForexContext.getEngine().getAccount().substring(0, 5).equals("DEMO2")) {
+		if (JForexContext.getEngine().getAccount().substring(0, 5).equals("DEMO2")) {
+			// TODO add OR passed validation in IF statement
+			
 			this.initialize();
-			this.setup.initialize(this.defInst);
+			this.setup.initializeConditions(this.defInst);
+			emergency.setMaxDD(maxDD);
 		} else {
-			Printer.println("NOT a demo account, exiting...");
-			// TOOD check encrypted key file for expiry
+			Printer.println("Failed validation, bailing program...");
 		}
 		
-		emergency.setMaxDD(maxDD);
+		
 		
 		// TODO initialize entry higher time frames
 	}
@@ -82,15 +84,15 @@ public abstract class AbstractSemiStrat implements IStrategy, IName {
 	 */
 	public void setSetup(AbsSetup setup) {
 		this.setup = setup;
-		Printer.println("Trading setup: " + this.setup.getName());
+		Printer.println("Trading setup: " + this.setup.toString());
 	}
 
 	/**
 	 * @param enter the enter to set
 	 */
-	public void setEnter(IEnter enter) {
+	public void setEnter(AbsEnter enter) {
 		this.enter = enter;
-		Printer.println("Entry: " + this.enter.getName());
+		Printer.println("Entry: " + this.enter.toString());
 	}
 
 	/**
@@ -98,7 +100,7 @@ public abstract class AbstractSemiStrat implements IStrategy, IName {
 	 */
 	public void setExit(AbsExit exit) {
 		this.exit = exit;
-		Printer.println("Exit: " + this.exit.getName());
+		Printer.println("Exit: " + this.exit.toString());
 	}
 
 	/**
@@ -106,7 +108,7 @@ public abstract class AbstractSemiStrat implements IStrategy, IName {
 	 */
 	public void setEmergency(AbsEmergency emergency) {
 		this.emergency = emergency;
-		Printer.println("Emergency exit: " + this.emergency.getName());
+		Printer.println("Emergency exit: " + this.emergency.toString());
 	}
 
 	/**

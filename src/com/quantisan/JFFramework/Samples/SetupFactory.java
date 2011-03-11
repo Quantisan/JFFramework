@@ -1,6 +1,6 @@
 package com.quantisan.JFFramework.Samples;
 
-import com.quantisan.JFFramework.Trade.AbsSetup;
+import com.quantisan.JFFramework.AbsSetup;
 
 
 public class SetupFactory {

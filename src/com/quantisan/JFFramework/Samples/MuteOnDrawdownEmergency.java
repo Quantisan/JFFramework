@@ -8,7 +8,7 @@ import com.quantisan.JFUtil.JForexAccount;
 
 public class MuteOnDrawdownEmergency extends AbsEmergency {
 	@Override
-	public String getName() {
+	public String toString() {
 		return "Mute on Drawdown Emergency";
 	}
 
