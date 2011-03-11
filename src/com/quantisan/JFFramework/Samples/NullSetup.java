@@ -40,4 +40,8 @@ public class NullSetup extends AbsSetup {
 		return setup;
 	}
 
+	@Override
+	public void initialize(Instrument instrument) {	
+	}
+
 }

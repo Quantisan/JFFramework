@@ -5,15 +5,15 @@ import com.dukascopy.api.Instrument;
 import com.dukascopy.api.Period;
 
 /**
- * Position manager (i.e. exit strategy) using Chain of Responsibility pattern.
+ * Exit manager (i.e. exit strategy) using Chain of Responsibility pattern.
  * 
  * @author plam
  *
  */
-public abstract class AbsPositionManager implements IName {
-	private AbsPositionManager next;
+public abstract class AbsExit implements IName {
+	private AbsExit next;
 	
-	public void setNext(AbsPositionManager successor) {
+	public void setNext(AbsExit successor) {
 		this.next = successor;
 	}
 	
