@@ -9,12 +9,14 @@ import com.quantisan.JFFramework.Trade.*;
 
 public class DoubleMACrossSetup extends AbsSetup {
 	private ICondition fastCondition, slowCondition;
-	private Sentiment fastSentiment, slowSentiment;
+	private Sentiment fastSentiment, slowSentiment;		// TODO put in Map<Instrument,Sentiment>
 	private Period fastPeriod, slowPeriod;
 	
-	public DoubleMACrossSetup(Period fastPeriod, Period slowPeriod, 
+	public DoubleMACrossSetup(AbsEntry entry, AbsExit exit,
+								Period fastPeriod, Period slowPeriod, 
 								int fastLength, int slowLength) 
 	{
+		super(entry, exit);
 		this.fastPeriod = fastPeriod;
 		this.slowPeriod = slowPeriod;
 		fastCondition = ConditionFactory.getMovingAverageCross(fastLength, slowLength);
@@ -46,7 +48,7 @@ public class DoubleMACrossSetup extends AbsSetup {
 
 	@Override
 	public String getTag() {
-		return "DMC";
+		return "DMC" + this.fastPeriod + this.slowPeriod;
 	}
 
 	@Override

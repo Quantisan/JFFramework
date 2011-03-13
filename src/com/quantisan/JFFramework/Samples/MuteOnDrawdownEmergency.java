@@ -7,6 +7,10 @@ import com.quantisan.JFFramework.AbstractSemiStrat;
 import com.quantisan.JFUtil.JForexAccount;
 
 public class MuteOnDrawdownEmergency extends AbsEmergency {
+	public MuteOnDrawdownEmergency(double maxDD, Period checkPeriod) {
+		super(maxDD, checkPeriod);
+	}
+	
 	@Override
 	public String toString() {
 		return "Mute on Drawdown Emergency";
@@ -14,16 +18,18 @@ public class MuteOnDrawdownEmergency extends AbsEmergency {
 
 	@Override
 	public String getTag() {
-		return "MOD";
+		return "MOD" + getCheckPeriod();
 	}
 
 	@Override
 	public void checkEmergency(AbstractSemiStrat strategy, Instrument instrument,
 								Period period) 
 	{
-		if (JForexAccount.isMaxDrawdownBroken(this.getMaxDD()))
-			strategy.setSetup(SetupFactory.getNullEntry());
+		if (period == getCheckPeriod()) {
+			if (JForexAccount.isMaxDrawdownBroken(this.getMaxDD())) {
+				strategy.setExposure(NullExposure.getInstance());
+			}
+		}
 		
 	}
-
 }

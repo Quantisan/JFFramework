@@ -14,7 +14,7 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	@Configurable("Instrument")
 		public Instrument defInst;	
 	@Configurable("Sentiment")
-		public Sentiment sentiment;
+		public Sentiment defSentiment;
 	@Configurable("Risk Pct per Trade (0.0, 1.0]") 
 		public double riskPct = 0.002;
 	@Configurable("Max. Drawdown (0.0, 1.0]") 
@@ -23,40 +23,39 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 		public boolean posthoc = false;
 	
 	private AbsSetup setup;
-	private AbsEnter enter;
+	//private AbsEntry entry;
 	private AbsEmergency emergency;
-	private IExposure exposure;
-	private AbsExit exit;	
-	
+	private AbsExposure exposure;
+	//private AbsExit exit;	
+
 	@Override
 	public final void onBar(Instrument instrument, Period period, IBar askBar,
 			IBar bidBar) throws JFException 
 	{
 		if (instrument != this.defInst)		return;
 		
-		// multithread diff parts?
+		// TODO multi-thread emergency and exit
 		emergency.checkEmergency(this, instrument, period);
-		exit.checkPositions(instrument, period, askBar, bidBar);
-		if (exposure.isNewPositionAllowed(instrument)) {
-			Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);
-			if (sentiment != Sentiment.NEUTRAL)
-				enter.enterPosition(instrument, sentiment);
-		}
+		setup.checkPositions(instrument, period, askBar, bidBar);
+		Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);		
+		if (sentiment == this.defSentiment && exposure.isNewPositionAllowed(instrument)) 
+		{			
+			setup.enterPosition(instrument, sentiment, this.riskPct);
+		}		
 	}
 
 	@Override
 	public final void onStart(IContext context) throws JFException {
 		JForexContext.setContext(context);
 		JForexAccount.setAccount(context.getAccount());
+
 		//JForexAccount.setRiskPct(this.riskPct);
 		Printer.println("-- Quantisan.com JFFramework v. " + this.version  + " --");
 		// TODO move validation check into class and expand on functionality
 		if (JForexContext.getEngine().getAccount().substring(0, 5).equals("DEMO2")) {
 			// TODO add OR passed validation in IF statement
-			
 			this.initialize();
 			this.setup.initializeConditions(this.defInst);
-			emergency.setMaxDD(maxDD);
 		} else {
 			Printer.println("Failed validation, bailing program...");
 		}
@@ -87,21 +86,21 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 		Printer.println("Trading setup: " + this.setup.toString());
 	}
 
-	/**
-	 * @param enter the enter to set
-	 */
-	public void setEnter(AbsEnter enter) {
-		this.enter = enter;
-		Printer.println("Entry: " + this.enter.toString());
-	}
-
-	/**
-	 * @param orderManager the orderManager to set
-	 */
-	public void setExit(AbsExit exit) {
-		this.exit = exit;
-		Printer.println("Exit: " + this.exit.toString());
-	}
+//	/**
+//	 * @param entry the enter to set
+//	 */
+//	public void setEntry(AbsEntry entry) {
+//		this.entry = entry;
+//		Printer.println("Entry: " + this.entry.toString());
+//	}
+//
+//	/**
+//	 * @param orderManager the orderManager to set
+//	 */
+//	public void setExit(AbsExit exit) {
+//		this.exit = exit;
+//		Printer.println("Exit: " + this.exit.toString());
+//	}
 
 	/**
 	 * @param emergency the riskManager to set
@@ -109,6 +108,10 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	public void setEmergency(AbsEmergency emergency) {
 		this.emergency = emergency;
 		Printer.println("Emergency exit: " + this.emergency.toString());
+	}
+
+	public void setExposure(AbsExposure exposure) {
+		this.exposure = exposure;
 	}
 
 	/**
