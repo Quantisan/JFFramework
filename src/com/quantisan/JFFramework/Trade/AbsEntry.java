@@ -11,6 +11,14 @@ import com.quantisan.JFFramework.*;
  *
  */
 public abstract class AbsEntry implements ITag {
+	private IStop stop;
+	public AbsEntry(IStop stop) {
+		this.stop = stop;
+	}
+	private IStop getStop() {
+		return this.stop;
+	}
+	
 	protected abstract IOrder enterPosition(Instrument instrument, Sentiment sentiment, double riskPct, String label);
 	
 	@Override public abstract String toString();

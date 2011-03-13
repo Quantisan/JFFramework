@@ -12,6 +12,14 @@ public class DoubleMACrossSetup extends AbsSetup {
 	private Sentiment fastSentiment, slowSentiment;		// TODO put in Map<Instrument,Sentiment>
 	private Period fastPeriod, slowPeriod;
 	
+	/**
+	 * @param entry
+	 * @param exit
+	 * @param fastPeriod fast period to use for the fast set of moving averages
+	 * @param slowPeriod slow period to use for the slow set of moving averages
+	 * @param fastLength length of the faster moving average
+	 * @param slowLength length of the slower moving average
+	 */
 	public DoubleMACrossSetup(AbsEntry entry, AbsExit exit,
 								Period fastPeriod, Period slowPeriod, 
 								int fastLength, int slowLength) 

@@ -123,4 +123,12 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	 */
 	public abstract void initialize();
 
+	protected double getRiskPct() {
+		return riskPct;
+	}
+
+	protected double getMaxDD() {
+		return maxDD;
+	}
+
 }

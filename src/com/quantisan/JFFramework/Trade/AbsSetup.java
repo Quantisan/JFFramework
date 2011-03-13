@@ -14,7 +14,7 @@ import com.quantisan.JFFramework.Sentiment;
 public abstract class AbsSetup implements ITag {
 	//private AbsSetup next;	
 	private AbsEntry entry;
-	private AbsExit exit;
+	private AbsExit exit;	
 	
 	public AbsSetup(AbsEntry entry, AbsExit exit) {
 		this.entry = entry;

@@ -10,6 +10,10 @@ import com.quantisan.JFUtil.Orderer;
 public class MAStopExit extends AbsExit {
 	private int length;
 
+	/**
+	 * @param period period to check positions for exit
+	 * @param length length of the moving average
+	 */
 	public MAStopExit(Period period, int length) {
 		super(period);
 		this.length = length;
