@@ -5,10 +5,10 @@ import com.quantisan.JFFramework.Sentiment;
 import com.quantisan.JFFramework.Trade.ICondition;
 import com.quantisan.JFUtil.JForexContext;
 
-public class MovingAverageCrossCondition implements ICondition {
+public class DualMovingAveragesCondition implements ICondition {
 	private int fastLength, slowLength;
 	
-	public MovingAverageCrossCondition(int fastLength, int slowLength) {
+	public DualMovingAveragesCondition(int fastLength, int slowLength) {
 		this.fastLength = fastLength;
 		this.slowLength = slowLength;
 	}

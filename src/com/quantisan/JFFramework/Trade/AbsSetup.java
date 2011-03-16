@@ -1,5 +1,7 @@
 package com.quantisan.JFFramework.Trade;
 
+import java.util.concurrent.Future;
+
 import com.dukascopy.api.*;
 import com.quantisan.JFFramework.ITag;
 import com.quantisan.JFFramework.Sentiment;
@@ -14,10 +16,12 @@ import com.quantisan.JFFramework.Sentiment;
 public abstract class AbsSetup implements ITag {
 	//private AbsSetup next;	
 	private AbsEntry entry;
+	private IStop stop;
 	private AbsExit exit;	
 	
-	public AbsSetup(AbsEntry entry, AbsExit exit) {
+	public AbsSetup(AbsEntry entry, IStop stop, AbsExit exit) {
 		this.entry = entry;
+		this.stop = stop;
 		this.exit = exit;
 	}
 	
@@ -35,9 +39,7 @@ public abstract class AbsSetup implements ITag {
 	 * Initialize the {@link ICondition}, called in {@link IStrategy#onStart(com.dukascopy.api.IContext) onStart}
 	 */
 	public abstract void initializeConditions(Instrument instrument) throws JFException;
-	
-	// TODO implement with simple conditional statements of a set of ICondition
-	//		filter instrument and period here for each condition
+		
 	/**
 	 * It is suggested to use State Pattern with {@link ICondition}.
 	 * 
@@ -52,10 +54,10 @@ public abstract class AbsSetup implements ITag {
 										IBar askBar, 
 										IBar bidBar)  throws JFException;
 	
-	public IOrder enterPosition(Instrument instrument, Sentiment sentiment, double riskPct) throws JFException 
+	public Future<IOrder> enterPosition(Instrument instrument, Sentiment sentiment, double riskPct) throws JFException 
 	{
-		String label = LabelMaker.getLabel(instrument, this, entry, exit);	
-		return entry.enterPosition(instrument, sentiment, riskPct, label);
+		String comment = OrderCommentMaker.getComment(this, entry, stop, exit);	
+		return entry.enterPosition(instrument, sentiment, riskPct, comment);
 	}
 	
 	public void checkPositions(Instrument instrument, Period period, IBar askBar,

@@ -16,30 +16,29 @@ public abstract class AbsEmergency implements ITag {
 	private AbsEmergency next;
 	
 	/**
-	 * Check risk
+	 * Check for emergency exit
 	 * 
-	 * @param strategy
+	 * @param strategy the running strategy
 	 * @param instrument
-	 * @param period
+	 * @param period current period
 	 */
 	public abstract void checkEmergency(AbstractSemiStrat strategy, Instrument instrument, Period period);
 
-	public void setNext(AbsEmergency successor) {
-		this.next = successor;
-	}
+	public void setNext(AbsEmergency successor) { this.next = successor; }
+	
+	public AbsEmergency getNext() { return this.next; }
 	
 	public AbsEmergency(double maxDD, Period checkPeriod) {
 		this.maxDD = maxDD;
 		this.checkPeriod = checkPeriod;		
 	}
 	
-	public double getMaxDD() {
-		return maxDD;
-	}
+	public double getMaxDD() { return maxDD; }
 
-	public Period getCheckPeriod() {
-		return checkPeriod;
-	}
+	/**
+	 * @return period/frequency to check for emergency conditions
+	 */
+	public Period getCheckPeriod() { return checkPeriod; }
 
 	@Override public abstract String toString();
 }

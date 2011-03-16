@@ -1,5 +1,7 @@
 package com.quantisan.JFFramework.Trade;
 
+import java.util.concurrent.Future;
+
 import com.dukascopy.api.IOrder;
 import com.dukascopy.api.Instrument;
 import com.quantisan.JFFramework.*;
@@ -15,11 +17,10 @@ public abstract class AbsEntry implements ITag {
 	public AbsEntry(IStop stop) {
 		this.stop = stop;
 	}
-	private IStop getStop() {
-		return this.stop;
-	}
+		
+	protected IStop getStop() { return this.stop; }
 	
-	protected abstract IOrder enterPosition(Instrument instrument, Sentiment sentiment, double riskPct, String label);
+	protected abstract Future<IOrder> enterPosition(Instrument instrument, Sentiment sentiment, double riskPct, String comment);
 	
 	@Override public abstract String toString();
 }

@@ -50,7 +50,7 @@ public abstract class AbsExit implements ITag {
 		if (period == this.period) {
 			List<IOrder> allOrders = Orderer.getOrders(instrument);
 			for (IOrder order : allOrders) {
-				LabelReader label = new LabelReader(order.getLabel());
+				OrderCommentReader label = new OrderCommentReader(order.getLabel());
 				if (label.getExit().equals(this.getTag())) {
 					matchedOrders.add(order);
 				}

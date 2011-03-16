@@ -1,10 +1,7 @@
-package com.quantisan.JFFramework.Samples;
+package com.quantisan.JFFramework.Trade;
 
 import com.dukascopy.api.Instrument;
 import com.quantisan.JFFramework.AbsExposure;
-import com.quantisan.JFFramework.Trade.AbsEntry;
-import com.quantisan.JFFramework.Trade.AbsExit;
-import com.quantisan.JFFramework.Trade.AbsSetup;
 
 /**
  * Disable new position entry by always returning false on {@link #isNewPositionAllowed(Instrument)}
@@ -29,6 +26,11 @@ public class NullExposure extends AbsExposure {
 	@Override
 	public boolean isNewPositionAllowed(Instrument instrument) {
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "Null exposure";
 	}
 
 }

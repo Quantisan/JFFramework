@@ -13,4 +13,6 @@ public abstract class AbsExposure {
 	}
 	
 	public abstract boolean isNewPositionAllowed(Instrument instrument) throws JFException;
+	
+	@Override public abstract String toString();
 }

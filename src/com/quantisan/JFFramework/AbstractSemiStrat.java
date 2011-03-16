@@ -1,5 +1,6 @@
 package com.quantisan.JFFramework;
 
+import java.util.*;
 import com.dukascopy.api.*;
 import com.quantisan.JFFramework.Trade.*;
 import com.quantisan.JFUtil.*;
@@ -23,21 +24,21 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 		public boolean posthoc = false;
 	
 	private AbsSetup setup;
-	//private AbsEntry entry;
 	private AbsEmergency emergency;
 	private AbsExposure exposure;
-	//private AbsExit exit;	
 
 	@Override
 	public final void onBar(Instrument instrument, Period period, IBar askBar,
 			IBar bidBar) throws JFException 
 	{
-		if (instrument != this.defInst)		return;
+		if (instrument != this.defInst)	{ return; }
 		
 		// TODO multi-thread emergency and exit
 		emergency.checkEmergency(this, instrument, period);
 		setup.checkPositions(instrument, period, askBar, bidBar);
-		Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);		
+		
+		Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);
+		
 		if (sentiment == this.defSentiment && exposure.isNewPositionAllowed(instrument)) 
 		{			
 			setup.enterPosition(instrument, sentiment, this.riskPct);
@@ -48,8 +49,11 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	public final void onStart(IContext context) throws JFException {
 		JForexContext.setContext(context);
 		JForexAccount.setAccount(context.getAccount());
-
-		//JForexAccount.setRiskPct(this.riskPct);
+		
+		Set<Instrument> instSet = new HashSet<Instrument>();
+		instSet.add(this.defInst);
+		Pairer.subscribeTransitionalInstruments(instSet);
+				
 		Printer.println("-- Quantisan.com JFFramework v. " + this.version  + " --");
 		// TODO move validation check into class and expand on functionality
 		if (JForexContext.getEngine().getAccount().substring(0, 5).equals("DEMO2")) {
@@ -112,6 +116,7 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 
 	public void setExposure(AbsExposure exposure) {
 		this.exposure = exposure;
+		Printer.println("Exposure check: " + this.exposure.toString());
 	}
 
 	/**

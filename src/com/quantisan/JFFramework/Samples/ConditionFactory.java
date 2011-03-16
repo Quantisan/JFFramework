@@ -6,6 +6,6 @@ public class ConditionFactory {
 	private ConditionFactory() {}
 	
 	public static ICondition getMovingAverageCross(int fastLength, int slowLength) {
-		return new MovingAverageCrossCondition(fastLength, slowLength);
+		return new DualMovingAveragesCondition(fastLength, slowLength);
 	}
 }

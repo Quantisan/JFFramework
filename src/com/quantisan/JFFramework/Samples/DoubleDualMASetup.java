@@ -7,7 +7,11 @@ import com.dukascopy.api.Period;
 import com.quantisan.JFFramework.*;
 import com.quantisan.JFFramework.Trade.*;
 
-public class DoubleMACrossSetup extends AbsSetup {
+/**
+ * @author plam
+ *
+ */
+public class DoubleDualMASetup extends AbsSetup {
 	private ICondition fastCondition, slowCondition;
 	private Sentiment fastSentiment, slowSentiment;		// TODO put in Map<Instrument,Sentiment>
 	private Period fastPeriod, slowPeriod;
@@ -20,11 +24,11 @@ public class DoubleMACrossSetup extends AbsSetup {
 	 * @param fastLength length of the faster moving average
 	 * @param slowLength length of the slower moving average
 	 */
-	public DoubleMACrossSetup(AbsEntry entry, AbsExit exit,
+	public DoubleDualMASetup(AbsEntry entry, IStop stop, AbsExit exit,
 								Period fastPeriod, Period slowPeriod, 
 								int fastLength, int slowLength) 
 	{
-		super(entry, exit);
+		super(entry, stop, exit);
 		this.fastPeriod = fastPeriod;
 		this.slowPeriod = slowPeriod;
 		fastCondition = ConditionFactory.getMovingAverageCross(fastLength, slowLength);
@@ -44,7 +48,7 @@ public class DoubleMACrossSetup extends AbsSetup {
 		if (period == fastPeriod)
 			fastSentiment = fastCondition.calculate(instrument, fastPeriod);
 		else if (period == slowPeriod)
-			slowSentiment = slowCondition.calculate(instrument, slowPeriod);
+			slowSentiment = slowCondition.calculate(instrument, slowPeriod);		
 		
 		if (fastSentiment == Sentiment.BULL && slowSentiment == Sentiment.BULL)
 			return Sentiment.BULL;
