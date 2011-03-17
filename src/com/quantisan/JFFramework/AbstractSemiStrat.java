@@ -56,7 +56,8 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 				
 		Printer.println("-- Quantisan.com JFFramework v. " + this.version  + " --");
 		// TODO move validation check into class and expand on functionality
-		if (JForexContext.getEngine().getAccount().substring(0, 5).equals("DEMO2")) {
+		if (JForexContext.getEngine().getType() == IEngine.Type.DEMO ||
+				JForexContext.getEngine().getType() == IEngine.Type.TEST) {
 			// TODO add OR passed validation in IF statement
 			this.initialize();
 			this.setup.initializeConditions(this.defInst);

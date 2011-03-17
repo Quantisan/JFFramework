@@ -47,5 +47,4 @@ public class SingleDualMASetup extends AbsSetup {
 			sentiment = condition.calculate(instrument, period);
 		return this.sentiment;
 	}
-
 }

@@ -60,6 +60,15 @@ public abstract class AbsSetup implements ITag {
 		return entry.enterPosition(instrument, sentiment, riskPct, comment);
 	}
 	
+	/**
+	 * Delegated to {@link AbsExit#managePositions(Instrument, Period, IBar, IBar)}
+	 * 
+	 * @param instrument
+	 * @param period
+	 * @param askBar
+	 * @param bidBar
+	 * @throws JFException
+	 */
 	public void checkPositions(Instrument instrument, Period period, IBar askBar,
 										IBar bidBar) throws JFException 
 	{

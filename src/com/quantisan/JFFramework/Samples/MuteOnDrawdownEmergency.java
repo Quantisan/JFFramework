@@ -31,6 +31,7 @@ public class MuteOnDrawdownEmergency extends AbsEmergency {
 				strategy.setExposure(NullFactory.getNullExposure());
 			}
 		}
-		
+//		if (this.getNext() != null)
+//			this.getNext().checkEmergency(strategy, instrument, period);
 	}
 }

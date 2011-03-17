@@ -21,19 +21,23 @@ public abstract class AbsExit implements ITag {
 //	}
 	private Period period;
 	/**
-	 * @param minPeriod period to check for exits
+	 * @param period how often to check for exits
 	 */
 	public AbsExit(Period period) {
 		this.period = period;
 	}
 	
+	/**
+	 * @return a period indicating how often this algorithm checks for exit condition
+	 */
 	public Period getDefaultPeriod() {
 		return this.period;
 	}
 	
 	/**
 	 * Manage all the positions in this instrument using the current exit algorithm
-	 * by matching {@link #getTag() Tags}.
+	 * by matching {@link #getTag() Tags} and then passing a list of matched orders 
+	 * to {@link #manageOrdersExit(Instrument, List, IBar, IBar)}.
 	 * 
 	 * @param instrument
 	 * @param period
@@ -42,7 +46,7 @@ public abstract class AbsExit implements ITag {
 	 * @return a list of orders that has been checked, and maybe exited
 	 * @throws JFException
 	 */
-	void managePositions(Instrument instrument, Period period, IBar askBar,
+	protected final void managePositions(Instrument instrument, Period period, IBar askBar,
 											IBar bidBar) throws JFException
 	{
 		List<IOrder> matchedOrders = new LinkedList<IOrder>();
@@ -50,8 +54,8 @@ public abstract class AbsExit implements ITag {
 		if (period == this.period) {
 			List<IOrder> allOrders = Orderer.getOrders(instrument);
 			for (IOrder order : allOrders) {
-				OrderCommentReader label = new OrderCommentReader(order.getLabel());
-				if (label.getExit().equals(this.getTag())) {
+				OrderCommentReader commr = OrderCommentReader.getInstance(order.getComment());
+				if (commr.getExit().equals(this.getTag())) {
 					matchedOrders.add(order);
 				}
 			}
@@ -60,14 +64,18 @@ public abstract class AbsExit implements ITag {
 	}
 	
 	/**
-	 * Called when the order's tag is equal to current algorithm's tag.
+	 * Called from {@link #managePositions(Instrument, Period, IBar, IBar)} 
+	 * within framework to manage list of matched orders that use this 
+	 * exit algorithm.
+	 * Do not call directly.
+	 * 
 	 * @param instrument
 	 * @param orders a verified list of orders that uses this exit algorithm
 	 * @param askBar current ask bar of the default period
 	 * @param bidBar current bid bar of the default period
 	 * @throws JFException
 	 */
-	protected abstract void manageOrdersExit(Instrument instrument, List<IOrder> orders, 
+	protected abstract void manageOrdersExit(Instrument instrument, List<IOrder> matchedOrders, 
 											IBar askBar, IBar bidBar) throws JFException;
 
 	

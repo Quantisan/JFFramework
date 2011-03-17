@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.dukascopy.api.*;
 import com.quantisan.JFFramework.Trade.AbsExit;
-import com.quantisan.JFFramework.Trade.OrderCommentReader;
 import com.quantisan.JFUtil.JForexContext;
 import com.quantisan.JFUtil.Orderer;
 
@@ -33,7 +32,7 @@ public class MAStopExit extends AbsExit {
 
 
 	@Override
-	protected void manageOrdersExit(Instrument instrument, List<IOrder> orders, 
+	protected void manageOrdersExit(Instrument instrument, List<IOrder> matchedOrders, 
 									IBar askBar, IBar bidBar) throws JFException 
 	{	
 		double ma = JForexContext.getIndicators().sma(instrument, 
@@ -45,11 +44,9 @@ public class MAStopExit extends AbsExit {
 				1, 
 				JForexContext.getHistory().getStartTimeOfCurrentBar(instrument, getDefaultPeriod()), 
 				0)[0];
-		for (IOrder order : orders) {
-			OrderCommentReader commr = OrderCommentReader.getInstance(order.getComment());
-			if ( commr.getExit() == this.getTag() &&
-				((order.isLong() && askBar.getHigh() < ma) ||
-				(!order.isLong() && bidBar.getLow() > ma))) {
+		for (IOrder order : matchedOrders) {			
+			if ((order.isLong() && askBar.getHigh() < ma) ||
+				(!order.isLong() && bidBar.getLow() > ma)) {
 				Orderer.close(order);
 			}
 		}

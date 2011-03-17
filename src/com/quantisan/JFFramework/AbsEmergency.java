@@ -24,10 +24,6 @@ public abstract class AbsEmergency implements ITag {
 	 */
 	public abstract void checkEmergency(AbstractSemiStrat strategy, Instrument instrument, Period period);
 
-	public void setNext(AbsEmergency successor) { this.next = successor; }
-	
-	public AbsEmergency getNext() { return this.next; }
-	
 	public AbsEmergency(double maxDD, Period checkPeriod) {
 		this.maxDD = maxDD;
 		this.checkPeriod = checkPeriod;		
@@ -39,6 +35,10 @@ public abstract class AbsEmergency implements ITag {
 	 * @return period/frequency to check for emergency conditions
 	 */
 	public Period getCheckPeriod() { return checkPeriod; }
+
+	public void setNext(AbsEmergency successor) { this.next = successor; }
+
+	public AbsEmergency getNext() { return this.next; }
 
 	@Override public abstract String toString();
 }
