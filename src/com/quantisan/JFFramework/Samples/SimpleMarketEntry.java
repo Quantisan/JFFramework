@@ -4,13 +4,13 @@ import java.util.concurrent.Future;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.IOrder;
 import com.dukascopy.api.Instrument;
+import com.dukascopy.api.JFException;
 import com.quantisan.JFFramework.Sentiment;
-import com.quantisan.JFFramework.Trade.AbsEntry;
+import com.quantisan.JFFramework.Trade.AbstractEntry;
 import com.quantisan.JFFramework.Trade.IStop;
-import com.quantisan.JFFramework.Trade.LabelMaker;
 import com.quantisan.JFUtil.*;
 
-public class SimpleMarketEntry extends AbsEntry {
+public class SimpleMarketEntry extends AbstractEntry {
 	public SimpleMarketEntry(IStop stop) {
 		super(stop);
 	}
@@ -22,7 +22,8 @@ public class SimpleMarketEntry extends AbsEntry {
 
 	@Override
 	protected Future<IOrder> enterPosition(Instrument instrument, Sentiment sentiment,
-			double riskPct, String comment) {		
+			double riskPct, String comment) throws JFException 
+	{		
 		double lot, open, stop;
 		
 		OrderCommand command;
@@ -30,7 +31,7 @@ public class SimpleMarketEntry extends AbsEntry {
 		else if (sentiment == Sentiment.BEAR) 	command = OrderCommand.SELL;
 		else {
 			throw new IllegalArgumentException("sentiment must be BULL or BEAR");
-		}
+		}		
 		
 		open = JForexContext.getPrice(instrument);
 		stop = this.getStop().getInitialStopPrice(instrument, sentiment, open);

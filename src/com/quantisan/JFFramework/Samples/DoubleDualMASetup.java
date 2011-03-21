@@ -11,8 +11,8 @@ import com.quantisan.JFFramework.Trade.*;
  * @author plam
  *
  */
-public class DoubleDualMASetup extends AbsSetup {
-	private ICondition fastCondition, slowCondition;
+public class DoubleDualMASetup extends AbstractSetup {
+	private AbstractCondition fastCondition, slowCondition;
 	private Sentiment fastSentiment, slowSentiment;		// TODO put in Map<Instrument,Sentiment>
 	private Period fastPeriod, slowPeriod;
 	
@@ -24,15 +24,15 @@ public class DoubleDualMASetup extends AbsSetup {
 	 * @param fastLength length of the faster moving average
 	 * @param slowLength length of the slower moving average
 	 */
-	public DoubleDualMASetup(AbsEntry entry, IStop stop, AbsExit exit,
+	public DoubleDualMASetup(AbstractEntry entry, IStop stop, AbstractExit exit,
 								Period fastPeriod, Period slowPeriod, 
 								int fastLength, int slowLength) 
 	{
 		super(entry, stop, exit);
 		this.fastPeriod = fastPeriod;
 		this.slowPeriod = slowPeriod;
-		fastCondition = ConditionFactory.getMovingAverageCross(fastLength, slowLength);
-		slowCondition = ConditionFactory.getMovingAverageCross(fastLength, slowLength);
+		fastCondition = new DualMovingAveragesCondition(fastLength, slowLength);
+		slowCondition = new DualMovingAveragesCondition(fastLength, slowLength);
 	}
 	
 	@Override

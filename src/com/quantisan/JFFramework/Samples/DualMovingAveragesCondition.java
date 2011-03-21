@@ -2,10 +2,10 @@ package com.quantisan.JFFramework.Samples;
 
 import com.dukascopy.api.*;
 import com.quantisan.JFFramework.Sentiment;
-import com.quantisan.JFFramework.Trade.ICondition;
+import com.quantisan.JFFramework.Trade.AbstractCondition;
 import com.quantisan.JFUtil.JForexContext;
 
-public class DualMovingAveragesCondition implements ICondition {
+public class DualMovingAveragesCondition extends AbstractCondition {
 	private int fastLength, slowLength;
 	
 	public DualMovingAveragesCondition(int fastLength, int slowLength) {
@@ -40,6 +40,11 @@ public class DualMovingAveragesCondition implements ICondition {
 			return Sentiment.BEAR;
 		else
 			return Sentiment.NEUTRAL;
+	}
+
+	@Override
+	public String toString() {
+		return "Dual MA Condition";
 	}
 
 }

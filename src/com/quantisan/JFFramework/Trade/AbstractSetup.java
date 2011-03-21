@@ -13,13 +13,13 @@ import com.quantisan.JFFramework.Sentiment;
  * 
  * @author Paul Lam
  */
-public abstract class AbsSetup implements ITag {
+public abstract class AbstractSetup implements ITag {
 	//private AbsSetup next;	
-	private AbsEntry entry;
+	private AbstractEntry entry;
 	private IStop stop;
-	private AbsExit exit;	
+	private AbstractExit exit;	
 	
-	public AbsSetup(AbsEntry entry, IStop stop, AbsExit exit) {
+	public AbstractSetup(AbstractEntry entry, IStop stop, AbstractExit exit) {
 		this.entry = entry;
 		this.stop = stop;
 		this.exit = exit;
@@ -36,12 +36,12 @@ public abstract class AbsSetup implements ITag {
 	@Override public abstract String toString();
 	
 	/**
-	 * Initialize the {@link ICondition}, called in {@link IStrategy#onStart(com.dukascopy.api.IContext) onStart}
+	 * Initialize the {@link AbstractCondition}, called in {@link IStrategy#onStart(com.dukascopy.api.IContext) onStart}
 	 */
 	public abstract void initializeConditions(Instrument instrument) throws JFException;
 		
 	/**
-	 * It is suggested to use State Pattern with {@link ICondition}.
+	 * It is suggested to use State Pattern with {@link AbstractCondition}.
 	 * 
 	 * @param instrument
 	 * @param period
@@ -61,7 +61,7 @@ public abstract class AbsSetup implements ITag {
 	}
 	
 	/**
-	 * Delegated to {@link AbsExit#managePositions(Instrument, Period, IBar, IBar)}
+	 * Delegated to {@link AbstractExit#managePositions(Instrument, Period, IBar, IBar)}
 	 * 
 	 * @param instrument
 	 * @param period

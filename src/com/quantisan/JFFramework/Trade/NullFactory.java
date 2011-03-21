@@ -1,6 +1,6 @@
 package com.quantisan.JFFramework.Trade;
 
-import com.quantisan.JFFramework.AbsExposure;
+import com.quantisan.JFFramework.AbstractExposure;
 
 /**
  * Factory to get framework Null component instances
@@ -9,7 +9,9 @@ import com.quantisan.JFFramework.AbsExposure;
  *
  */
 public class NullFactory {
-	public static AbsExposure getNullExposure() {
-		return NullExposure.getInstance();
-	}
+	private NullFactory() {};
+	
+	public static AbstractExposure getNullExposure() { return NullExposure.getInstance(); }
+	
+	public static AbstractExit getNullExit() { return NullExit.getInstance(); }
 }

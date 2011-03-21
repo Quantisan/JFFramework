@@ -5,23 +5,23 @@ import com.dukascopy.api.Instrument;
 import com.dukascopy.api.JFException;
 import com.dukascopy.api.Period;
 import com.quantisan.JFFramework.Sentiment;
-import com.quantisan.JFFramework.Trade.AbsEntry;
-import com.quantisan.JFFramework.Trade.AbsExit;
-import com.quantisan.JFFramework.Trade.AbsSetup;
-import com.quantisan.JFFramework.Trade.ICondition;
+import com.quantisan.JFFramework.Trade.AbstractEntry;
+import com.quantisan.JFFramework.Trade.AbstractExit;
+import com.quantisan.JFFramework.Trade.AbstractSetup;
+import com.quantisan.JFFramework.Trade.AbstractCondition;
 import com.quantisan.JFFramework.Trade.IStop;
 
-public class SingleDualMASetup extends AbsSetup {
+public class SingleDualMASetup extends AbstractSetup {
 	private Period period;
-	private ICondition condition;
+	private AbstractCondition condition;
 	private Sentiment sentiment;
 	
-	public SingleDualMASetup(AbsEntry entry, IStop stop, AbsExit exit, 
+	public SingleDualMASetup(AbstractEntry entry, IStop stop, AbstractExit exit, 
 						Period period, int fastLength, int slowLength) 
 	{
 		super(entry, stop, exit);
 		this.period = period;
-		condition = ConditionFactory.getMovingAverageCross(fastLength, slowLength);
+		condition = new DualMovingAveragesCondition(fastLength, slowLength);
 	}
 
 	@Override

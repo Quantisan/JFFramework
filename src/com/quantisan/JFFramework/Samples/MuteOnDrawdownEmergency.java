@@ -2,12 +2,12 @@ package com.quantisan.JFFramework.Samples;
 
 import com.dukascopy.api.Instrument;
 import com.dukascopy.api.Period;
-import com.quantisan.JFFramework.AbsEmergency;
+import com.quantisan.JFFramework.AbstractEmergency;
 import com.quantisan.JFFramework.AbstractSemiStrat;
 import com.quantisan.JFFramework.Trade.NullFactory;
 import com.quantisan.JFUtil.JForexAccount;
 
-public class MuteOnDrawdownEmergency extends AbsEmergency {
+public class MuteOnDrawdownEmergency extends AbstractEmergency {
 	public MuteOnDrawdownEmergency(double maxDD, Period checkPeriod) {
 		super(maxDD, checkPeriod);
 	}

@@ -30,12 +30,17 @@ public class MACrossStrategyDemo extends AbstractSemiStrat {
 	public void initialize() {
 		Period minPeriod = Period.THIRTY_MINS;
 		IStop stop = StopFactory.getFixedAbsoluteStopInstance(100d); 
-		AbsEntry entry = new SimpleMarketEntry(stop);
-		AbsExit exit = new MAStopExit(minPeriod, 200);
+		AbstractEntry entry = new SimpleMarketEntry(stop);
+		AbstractExit exit = new MAStopExit(minPeriod, 200);
 		this.setSetup(new SingleDualMASetup(entry, stop, exit, 
 											minPeriod, 50, 200));
 		this.setEmergency(new MuteOnDrawdownEmergency(this.getMaxDD(), minPeriod));
 		this.setExposure(new StopLossExposure(this.getRiskPct()));
+	}
+
+	@Override
+	public String toString() {
+		return "MA Strategy Demo";
 	}
 
 }

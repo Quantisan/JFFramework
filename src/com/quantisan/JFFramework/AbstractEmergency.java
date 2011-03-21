@@ -8,12 +8,12 @@ import com.dukascopy.api.*;
  * @author plam
  *
  */
-public abstract class AbsEmergency implements ITag {
+public abstract class AbstractEmergency implements ITag {
 	// NOTE: this abs class seem to be made to check DD only...
 	// TODO remove DD focused algo and use CofR, read max DD val from file
 	private double maxDD;
 	private Period checkPeriod;
-	private AbsEmergency next;
+	private AbstractEmergency next;
 	
 	/**
 	 * Check for emergency exit
@@ -24,7 +24,7 @@ public abstract class AbsEmergency implements ITag {
 	 */
 	public abstract void checkEmergency(AbstractSemiStrat strategy, Instrument instrument, Period period);
 
-	public AbsEmergency(double maxDD, Period checkPeriod) {
+	public AbstractEmergency(double maxDD, Period checkPeriod) {
 		this.maxDD = maxDD;
 		this.checkPeriod = checkPeriod;		
 	}
@@ -36,9 +36,9 @@ public abstract class AbsEmergency implements ITag {
 	 */
 	public Period getCheckPeriod() { return checkPeriod; }
 
-	public void setNext(AbsEmergency successor) { this.next = successor; }
+	public void setNext(AbstractEmergency successor) { this.next = successor; }
 
-	public AbsEmergency getNext() { return this.next; }
+	public AbstractEmergency getNext() { return this.next; }
 
 	@Override public abstract String toString();
 }

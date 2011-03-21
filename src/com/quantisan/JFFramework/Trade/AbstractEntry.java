@@ -4,6 +4,7 @@ import java.util.concurrent.Future;
 
 import com.dukascopy.api.IOrder;
 import com.dukascopy.api.Instrument;
+import com.dukascopy.api.JFException;
 import com.quantisan.JFFramework.*;
 
 /**
@@ -12,15 +13,18 @@ import com.quantisan.JFFramework.*;
  * @author plam
  *
  */
-public abstract class AbsEntry implements ITag {
+public abstract class AbstractEntry implements ITag {
 	private IStop stop;
-	public AbsEntry(IStop stop) {
+	public AbstractEntry(IStop stop) {
 		this.stop = stop;
 	}
 		
 	protected IStop getStop() { return this.stop; }
 	
-	protected abstract Future<IOrder> enterPosition(Instrument instrument, Sentiment sentiment, double riskPct, String comment);
+	protected abstract Future<IOrder> enterPosition(Instrument instrument, 
+													Sentiment sentiment, 
+													double riskPct, 
+													String comment) throws JFException;
 	
 	@Override public abstract String toString();
 }

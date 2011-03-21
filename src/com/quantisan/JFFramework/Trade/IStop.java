@@ -6,5 +6,5 @@ import com.quantisan.JFFramework.*;
 public interface IStop extends ITag {	
 	public double getInitialStopPrice(Instrument instrument,											
 												Sentiment sentiment,
-												double openPrice);
+												double openPrice) throws JFException;
 }

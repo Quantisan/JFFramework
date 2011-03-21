@@ -3,10 +3,10 @@ package com.quantisan.JFFramework.Trade;
 public class OrderCommentMaker {
 	private OrderCommentMaker() {}
 	
-	public static String getComment(AbsSetup setup, 
-									AbsEntry entry,
+	public static String getComment(AbstractSetup setup, 
+									AbstractEntry entry,
 									IStop stop,
-									AbsExit exit) 
+									AbstractExit exit) 
 	{
 		char split = ';';
 		String label;

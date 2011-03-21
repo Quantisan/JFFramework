@@ -3,11 +3,11 @@ package com.quantisan.JFFramework.Samples;
 import java.util.List;
 
 import com.dukascopy.api.*;
-import com.quantisan.JFFramework.Trade.AbsExit;
+import com.quantisan.JFFramework.Trade.AbstractExit;
 import com.quantisan.JFUtil.JForexContext;
 import com.quantisan.JFUtil.Orderer;
 
-public class MAStopExit extends AbsExit {
+public class MAStopExit extends AbstractExit {
 	private int length;
 
 	/**

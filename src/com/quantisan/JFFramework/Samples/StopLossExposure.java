@@ -1,7 +1,7 @@
 package com.quantisan.JFFramework.Samples;
 
 import com.dukascopy.api.*;
-import com.quantisan.JFFramework.AbsExposure;
+import com.quantisan.JFFramework.AbstractExposure;
 import com.quantisan.JFUtil.*;
 
 /**
@@ -10,7 +10,7 @@ import com.quantisan.JFUtil.*;
  * @author plam
  *
  */
-public class StopLossExposure extends AbsExposure {
+public class StopLossExposure extends AbstractExposure {
 	public StopLossExposure(double riskPct) {
 		super(riskPct);
 	}
@@ -24,5 +24,10 @@ public class StopLossExposure extends AbsExposure {
 	@Override
 	public String toString() {
 		return "Stop loss check exposure";
+	}
+
+	@Override
+	public String getTag() {
+		return "SLE";
 	}
 }

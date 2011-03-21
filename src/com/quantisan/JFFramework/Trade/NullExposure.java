@@ -1,26 +1,26 @@
 package com.quantisan.JFFramework.Trade;
 
 import com.dukascopy.api.Instrument;
-import com.quantisan.JFFramework.AbsExposure;
+import com.quantisan.JFFramework.AbstractExposure;
 
 /**
  * Disable new position entry by always returning false on {@link #isNewPositionAllowed(Instrument)}
  * @author plam
  *
  */
-public class NullExposure extends AbsExposure {
+public class NullExposure extends AbstractExposure {
 	public NullExposure(double riskPct) {
 		super(riskPct);
 		// TODO Auto-generated constructor stub
 	}
 
-	private static final NullExposure exposure = new NullExposure(0);
+	private static final NullExposure INSTANCE = new NullExposure(0);
 	
 	/**
 	 * @return a Singleton instance
 	 */
-	public static AbsExposure getInstance() {
-		return exposure;
+	public static AbstractExposure getInstance() {
+		return INSTANCE;
 	}
 	
 	@Override
@@ -31,6 +31,11 @@ public class NullExposure extends AbsExposure {
 	@Override
 	public String toString() {
 		return "Null exposure";
+	}
+
+	@Override
+	public String getTag() {
+		return "NUL";
 	}
 
 }

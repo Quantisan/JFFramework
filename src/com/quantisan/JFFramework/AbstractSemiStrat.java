@@ -10,8 +10,6 @@ import com.quantisan.JFUtil.*;
  *
  */
 public abstract class AbstractSemiStrat implements IStrategy, ITag {	
-	private final String version = "0.1 alpha";
-	
 	@Configurable("Instrument")
 		public Instrument defInst;	
 	@Configurable("Sentiment")
@@ -23,9 +21,9 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	@Configurable("Record post-hoc trade data on exit")
 		public boolean posthoc = false;
 	
-	private AbsSetup setup;
-	private AbsEmergency emergency;
-	private AbsExposure exposure;
+	private AbstractSetup setup;
+	private AbstractEmergency emergency;
+	private AbstractExposure exposure;
 
 	@Override
 	public final void onBar(Instrument instrument, Period period, IBar askBar,
@@ -53,8 +51,10 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 		Set<Instrument> instSet = new HashSet<Instrument>();
 		instSet.add(this.defInst);
 		Pairer.subscribeTransitionalInstruments(instSet);
-				
-		Printer.println("-- Quantisan.com JFFramework v. " + this.version  + " --");
+		
+		Printer.println("-- " + this.toString() + " --");
+		Printer.println("-- Disclaimer: use at your own risk --");	// TODO add full disclaimer		
+		
 		// TODO move validation check into class and expand on functionality
 		if (JForexContext.getEngine().getType() == IEngine.Type.DEMO ||
 				JForexContext.getEngine().getType() == IEngine.Type.TEST) {
@@ -86,7 +86,7 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	/**
 	 * @param setup the setup to set
 	 */
-	public void setSetup(AbsSetup setup) {
+	public void setSetup(AbstractSetup setup) {
 		this.setup = setup;
 		Printer.println("Trading setup: " + this.setup.toString());
 	}
@@ -110,21 +110,21 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	/**
 	 * @param emergency the riskManager to set
 	 */
-	public void setEmergency(AbsEmergency emergency) {
+	public void setEmergency(AbstractEmergency emergency) {
 		this.emergency = emergency;
 		Printer.println("Emergency exit: " + this.emergency.toString());
 	}
 
-	public void setExposure(AbsExposure exposure) {
+	public void setExposure(AbstractExposure exposure) {
 		this.exposure = exposure;
 		Printer.println("Exposure check: " + this.exposure.toString());
 	}
 
 	/**
 	 * Call in onStart() to set the various components.
-	 * @see {@link #setSetup(AbsSetup)}, 
+	 * @see {@link #setSetup(AbstractSetup)}, 
 	 * {@link #setOrderManager(AbsExit)}, 
-	 * {@link #setEmergency(AbsEmergency)},
+	 * {@link #setEmergency(AbstractEmergency)},
 	 * {@link IStrategy#onStart(IContext)},
 	 */
 	public abstract void initialize();
@@ -136,5 +136,14 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	protected double getMaxDD() {
 		return maxDD;
 	}
+	
+	/**
+	 * @return the posthoc
+	 */
+	protected boolean isPosthoc() {
+		return posthoc;
+	}
+
+	@Override public abstract String toString();
 
 }

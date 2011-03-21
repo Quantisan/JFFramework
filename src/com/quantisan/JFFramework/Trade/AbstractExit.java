@@ -13,7 +13,7 @@ import com.quantisan.JFUtil.Orderer;
  * @author plam
  *
  */
-public abstract class AbsExit implements ITag {
+public abstract class AbstractExit implements ITag {
 //	private AbsExit next;
 //	
 //	public void setNext(AbsExit successor) {
@@ -23,7 +23,7 @@ public abstract class AbsExit implements ITag {
 	/**
 	 * @param period how often to check for exits
 	 */
-	public AbsExit(Period period) {
+	public AbstractExit(Period period) {
 		this.period = period;
 	}
 	
@@ -70,7 +70,7 @@ public abstract class AbsExit implements ITag {
 	 * Do not call directly.
 	 * 
 	 * @param instrument
-	 * @param orders a verified list of orders that uses this exit algorithm
+	 * @param matchedOrders a verified list of orders that uses this exit algorithm
 	 * @param askBar current ask bar of the default period
 	 * @param bidBar current bid bar of the default period
 	 * @throws JFException

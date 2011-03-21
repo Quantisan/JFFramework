@@ -2,9 +2,9 @@ package com.quantisan.JFFramework;
 
 import com.dukascopy.api.*;
 
-public abstract class AbsExposure {
+public abstract class AbstractExposure implements ITag {
 	private double riskPct;
-	public AbsExposure(double riskPct) {
+	public AbstractExposure(double riskPct) {
 		this.riskPct = riskPct;
 	}
 	
