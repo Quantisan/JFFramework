@@ -1,39 +1,30 @@
 package com.quantisan.JFFramework.Samples;
 
 import com.dukascopy.api.*;
+import com.dukascopy.api.IIndicators.AppliedPrice;
+import com.dukascopy.api.IIndicators.MaType;
 import com.quantisan.JFFramework.Sentiment;
 import com.quantisan.JFFramework.Trade.AbstractCondition;
-import com.quantisan.JFUtil.JForexContext;
+import com.quantisan.JFUtil.IndicatorBean.Indicating;
+import com.quantisan.JFUtil.IndicatorBean.IndicatorBeanFactory;
+import com.quantisan.JFUtil.IndicatorBean.MovingAverage;
 
 public class DualMovingAveragesCondition extends AbstractCondition {
-	private int fastLength, slowLength;
+	private int fastWidth, slowWidth;
+	private MovingAverage maBean = IndicatorBeanFactory.getMovingAverage();
 	
-	public DualMovingAveragesCondition(int fastLength, int slowLength) {
-		this.fastLength = fastLength;
-		this.slowLength = slowLength;
+	public DualMovingAveragesCondition(MaType maType, int fastWidth, int slowWidth) {		
+		this.fastWidth = fastWidth;
+		this.slowWidth = slowWidth;
+		maBean.setAppliedPrice(AppliedPrice.MEDIAN_PRICE).setMAType(maType);
 	}
 	
 	@Override
 	public Sentiment calculate(Instrument instrument, Period period) throws JFException
-	{
-		double maFast = JForexContext.getIndicators().sma(instrument, 
-							period, 
-							OfferSide.BID, 
-							IIndicators.AppliedPrice.MEDIAN_PRICE, 
-							this.fastLength, 
-							Filter.ALL_FLATS, 
-							1, 
-							JForexContext.getHistory().getStartTimeOfCurrentBar(instrument, period), 
-							0)[0];
-		double maSlow = JForexContext.getIndicators().sma(instrument, 
-							period, 
-							OfferSide.BID, 
-							IIndicators.AppliedPrice.MEDIAN_PRICE, 
-							this.slowLength, 
-							Filter.ALL_FLATS, 
-							1, 
-							JForexContext.getHistory().getStartTimeOfCurrentBar(instrument, period), 
-							0)[0];
+	{			
+		double maFast = Indicating.calculate(instrument, period, maBean.setWidth(this.fastWidth));
+		double maSlow = Indicating.calculate(instrument, period, maBean.setWidth(this.slowWidth));
+
 		if (maFast > maSlow)
 			return Sentiment.BULL;
 		else if (maFast < maSlow)
@@ -44,7 +35,7 @@ public class DualMovingAveragesCondition extends AbstractCondition {
 
 	@Override
 	public String toString() {
-		return "Dual MA Condition";
+		return "Dual Moving Averages Condition";
 	}
 
 }

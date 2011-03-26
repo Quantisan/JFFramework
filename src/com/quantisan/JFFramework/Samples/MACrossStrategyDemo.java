@@ -1,15 +1,9 @@
-package com.quantisan.Testing;
+package com.quantisan.JFFramework.Samples;
 
 import com.dukascopy.api.JFException;
 import com.dukascopy.api.Library;
 import com.dukascopy.api.Period;
 import com.quantisan.JFFramework.*;
-import com.quantisan.JFFramework.Samples.MAStopExit;
-import com.quantisan.JFFramework.Samples.MuteOnDrawdownEmergency;
-import com.quantisan.JFFramework.Samples.SimpleMarketEntry;
-import com.quantisan.JFFramework.Samples.SingleDualMASetup;
-import com.quantisan.JFFramework.Samples.StopFactory;
-import com.quantisan.JFFramework.Samples.StopLossExposure;
 import com.quantisan.JFFramework.Trade.*;
 import com.quantisan.JFUtil.Recorder;
 
@@ -28,7 +22,7 @@ public class MACrossStrategyDemo extends AbstractSemiStrat {
 
 	@Override
 	public void initialize() {
-		Period minPeriod = Period.THIRTY_MINS;
+		Period minPeriod = Period.TEN_SECS;
 		IStop stop = StopFactory.getFixedAbsoluteStopInstance(100d); 
 		AbstractEntry entry = new SimpleMarketEntry(stop);
 		AbstractExit exit = new MAStopExit(minPeriod, 200);

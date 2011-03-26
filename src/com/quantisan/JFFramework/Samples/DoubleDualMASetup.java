@@ -1,6 +1,7 @@
 package com.quantisan.JFFramework.Samples;
 
 import com.dukascopy.api.IBar;
+import com.dukascopy.api.IIndicators.MaType;
 import com.dukascopy.api.Instrument;
 import com.dukascopy.api.JFException;
 import com.dukascopy.api.Period;
@@ -31,8 +32,8 @@ public class DoubleDualMASetup extends AbstractSetup {
 		super(entry, stop, exit);
 		this.fastPeriod = fastPeriod;
 		this.slowPeriod = slowPeriod;
-		fastCondition = new DualMovingAveragesCondition(fastLength, slowLength);
-		slowCondition = new DualMovingAveragesCondition(fastLength, slowLength);
+		fastCondition = new DualMovingAveragesCondition(MaType.SMA, fastLength, slowLength);
+		slowCondition = new DualMovingAveragesCondition(MaType.SMA, fastLength, slowLength);
 	}
 	
 	@Override

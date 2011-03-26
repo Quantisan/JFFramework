@@ -12,6 +12,7 @@ public abstract class AbstractExposure implements ITag {
 		return this.riskPct;
 	}
 	
+	// TODO filter out the correct tag
 	public abstract boolean isNewPositionAllowed(Instrument instrument) throws JFException;
 	
 	@Override public abstract String toString();

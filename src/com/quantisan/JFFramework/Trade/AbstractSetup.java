@@ -36,7 +36,8 @@ public abstract class AbstractSetup implements ITag {
 	@Override public abstract String toString();
 	
 	/**
-	 * Initialize the {@link AbstractCondition}, called in {@link IStrategy#onStart(com.dukascopy.api.IContext) onStart}
+	 * Initialize the {@link AbstractCondition} calculations, 
+	 * called in {@link IStrategy#onStart(com.dukascopy.api.IContext) onStart}
 	 */
 	public abstract void initializeConditions(Instrument instrument) throws JFException;
 		

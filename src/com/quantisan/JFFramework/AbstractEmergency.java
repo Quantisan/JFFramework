@@ -22,6 +22,7 @@ public abstract class AbstractEmergency implements ITag {
 	 * @param instrument
 	 * @param period current period
 	 */
+	// TODO filter out the incorrect tag
 	public abstract void checkEmergency(AbstractSemiStrat strategy, Instrument instrument, Period period);
 
 	public AbstractEmergency(double maxDD, Period checkPeriod) {

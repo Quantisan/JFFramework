@@ -1,6 +1,7 @@
 package com.quantisan.JFFramework.Samples;
 
 import com.dukascopy.api.IBar;
+import com.dukascopy.api.IIndicators.MaType;
 import com.dukascopy.api.Instrument;
 import com.dukascopy.api.JFException;
 import com.dukascopy.api.Period;
@@ -10,6 +11,7 @@ import com.quantisan.JFFramework.Trade.AbstractExit;
 import com.quantisan.JFFramework.Trade.AbstractSetup;
 import com.quantisan.JFFramework.Trade.AbstractCondition;
 import com.quantisan.JFFramework.Trade.IStop;
+import com.quantisan.JFUtil.Printer;
 
 public class SingleDualMASetup extends AbstractSetup {
 	private Period period;
@@ -17,11 +19,11 @@ public class SingleDualMASetup extends AbstractSetup {
 	private Sentiment sentiment;
 	
 	public SingleDualMASetup(AbstractEntry entry, IStop stop, AbstractExit exit, 
-						Period period, int fastLength, int slowLength) 
+						Period period, int fastWidth, int slowWidth) 
 	{
 		super(entry, stop, exit);
 		this.period = period;
-		condition = new DualMovingAveragesCondition(fastLength, slowLength);
+		condition = new DualMovingAveragesCondition(MaType.SMA, fastWidth, slowWidth);
 	}
 
 	@Override
@@ -43,8 +45,10 @@ public class SingleDualMASetup extends AbstractSetup {
 	@Override
 	public Sentiment calculate(Instrument instrument, Period period,
 			IBar askBar, IBar bidBar) throws JFException {
-		if (period == this.period)
+		if (period == this.period) {
 			sentiment = condition.calculate(instrument, period);
+			Printer.println(sentiment);
+		}
 		return this.sentiment;
 	}
 }

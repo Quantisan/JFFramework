@@ -36,8 +36,10 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 		setup.checkPositions(instrument, period, askBar, bidBar);
 		
 		Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);
+		// TODO output sentiment assessment probability
 		
-		if (sentiment == this.defSentiment && exposure.isNewPositionAllowed(instrument)) 
+		if (sentiment == this.defSentiment && sentiment != Sentiment.NEUTRAL 
+				&& exposure.isNewPositionAllowed(instrument)) 
 		{			
 			setup.enterPosition(instrument, sentiment, this.riskPct);
 		}		
@@ -52,22 +54,21 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 		instSet.add(this.defInst);
 		Pairer.subscribeTransitionalInstruments(instSet);
 		
-		Printer.println("-- " + this.toString() + " --");
-		Printer.println("-- Disclaimer: use at your own risk --");	// TODO add full disclaimer		
+		Printer.println("-- Disclaimer: use at your own risk --");	// TODO add full disclaimer	
+		Printer.println("-- " + this.toString() + " --");			
 		
 		// TODO move validation check into class and expand on functionality
 		if (JForexContext.getEngine().getType() == IEngine.Type.DEMO ||
 				JForexContext.getEngine().getType() == IEngine.Type.TEST) {
 			// TODO add OR passed validation in IF statement
+			Printer.println("Initialising ...");
 			this.initialize();
+			Printer.println("Pre-calculating dataset for " + this.defInst);
 			this.setup.initializeConditions(this.defInst);
 		} else {
 			Printer.println("Failed validation, bailing program...");
 		}
-		
-		
-		
-		// TODO initialize entry higher time frames
+		Printer.println("Strategy running ...");
 	}
 
 	@Override
@@ -122,12 +123,13 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 
 	/**
 	 * Call in onStart() to set the various components.
+	 * @throws JFException 
 	 * @see {@link #setSetup(AbstractSetup)}, 
 	 * {@link #setOrderManager(AbsExit)}, 
 	 * {@link #setEmergency(AbstractEmergency)},
 	 * {@link IStrategy#onStart(IContext)},
 	 */
-	public abstract void initialize();
+	public abstract void initialize() throws JFException;
 
 	protected double getRiskPct() {
 		return riskPct;

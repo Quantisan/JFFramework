@@ -24,7 +24,7 @@ public abstract class AbstractCondition {
 	/**
 	 * @param next the next to set
 	 */
-	protected void setNext(AbstractCondition next) {
+	public void setNext(AbstractCondition next) {
 		this.next = next;
 	}
 
