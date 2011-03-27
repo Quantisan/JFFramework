@@ -1,5 +1,7 @@
 package com.quantisan.JFFramework.Samples;
 
+import com.dukascopy.api.IBar;
+import com.dukascopy.api.Instrument;
 import com.dukascopy.api.JFException;
 import com.dukascopy.api.Library;
 import com.dukascopy.api.Period;
@@ -35,6 +37,13 @@ public class MACrossStrategyDemo extends AbstractSemiStrat {
 	@Override
 	public String toString() {
 		return "MA Strategy Demo";
+	}
+
+	@Override
+	public void onBar(Instrument instrument, Period period, IBar askBar,
+			IBar bidBar) throws JFException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

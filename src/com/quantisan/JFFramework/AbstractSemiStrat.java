@@ -11,12 +11,10 @@ import com.quantisan.JFUtil.*;
  */
 public abstract class AbstractSemiStrat implements IStrategy, ITag {	
 	@Configurable("Instrument")
-		public Instrument defInst;	
-	@Configurable("Sentiment")
-		public Sentiment defSentiment;
-	@Configurable("Risk Pct per Trade (0.0, 1.0]") 
+		public Instrument defInst;
+	@Configurable("Risk Fraction per Trade (0.0, 1.0]") 
 		public double riskPct = 0.002;
-	@Configurable("Max. Drawdown (0.0, 1.0]") 
+	@Configurable("Max. Drawdown Fraction (0.0, 1.0]") 
 		public double maxDD = 0.02;
 	@Configurable("Record post-hoc trade data on exit")
 		public boolean posthoc = false;
@@ -26,24 +24,27 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	private AbstractExposure exposure;
 
 	@Override
-	public final void onBar(Instrument instrument, Period period, IBar askBar,
-			IBar bidBar) throws JFException 
-	{
-		if (instrument != this.defInst)	{ return; }
-		
-		// TODO multi-thread emergency and exit
-		emergency.checkEmergency(this, instrument, period);
-		setup.checkPositions(instrument, period, askBar, bidBar);
-		
-		Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);
-		// TODO output sentiment assessment probability
-		
-		if (sentiment == this.defSentiment && sentiment != Sentiment.NEUTRAL 
-				&& exposure.isNewPositionAllowed(instrument)) 
-		{			
-			setup.enterPosition(instrument, sentiment, this.riskPct);
-		}		
-	}
+	public abstract void onBar(Instrument instrument, Period period, IBar askBar,
+			IBar bidBar) throws JFException;
+//	{
+//		if (instrument != this.defInst)	{ return; }
+//		
+//		// TODO multi-thread emergency and exit
+//		emergency.checkEmergency(this, instrument, period);
+//		setup.checkPositions(instrument, period, askBar, bidBar);
+//		
+//		Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);
+//		// TODO output sentiment assessment probability
+//
+//		if (period == Period.TICK 	// prevents multiple run on same tick for overlapping periods
+//				&& sentiment == this.defSentiment 
+//				&& sentiment != Sentiment.NEUTRAL 
+//				&& exposure.isNewPositionAllowed(instrument)) 
+//		{			
+//			Printer.println("calling entePosition / " + period);
+//			setup.enterPosition(instrument, sentiment, this.riskPct);
+//		}		
+//	}
 
 	@Override
 	public final void onStart(IContext context) throws JFException {
@@ -65,10 +66,11 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 			this.initialize();
 			Printer.println("Pre-calculating dataset for " + this.defInst);
 			this.setup.initializeConditions(this.defInst);
+			Printer.println("Strategy running ...");
 		} else {
-			Printer.println("Failed validation, bailing program...");
+			Printer.println("Failed initialising, bailing ...");
 		}
-		Printer.println("Strategy running ...");
+		
 	}
 
 	@Override
@@ -130,6 +132,18 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	 * {@link IStrategy#onStart(IContext)},
 	 */
 	public abstract void initialize() throws JFException;
+
+	public AbstractSetup getSetup() {
+		return setup;
+	}
+
+	public AbstractEmergency getEmergency() {
+		return emergency;
+	}
+
+	public AbstractExposure getExposure() {
+		return exposure;
+	}
 
 	protected double getRiskPct() {
 		return riskPct;

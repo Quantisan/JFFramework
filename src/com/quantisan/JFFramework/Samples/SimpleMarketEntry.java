@@ -1,5 +1,7 @@
 package com.quantisan.JFFramework.Samples;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Future;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.IOrder;
@@ -21,7 +23,7 @@ public class SimpleMarketEntry extends AbstractEntry {
 	}
 
 	@Override
-	protected Future<IOrder> enterPosition(Instrument instrument, Sentiment sentiment,
+	protected List<Future<IOrder>> enterPosition(Instrument instrument, Sentiment sentiment,
 			double riskPct, String comment) throws JFException 
 	{		
 		double lot, open, stop;
@@ -42,7 +44,10 @@ public class SimpleMarketEntry extends AbstractEntry {
 											.setStopLossPrice(stop)
 											.setComment(comment)
 											.build();
-		return Orderer.placeOrder(ticket);
+		Future<IOrder> future = Orderer.placeOrder(ticket);
+		List<Future<IOrder>> futures = new LinkedList<Future<IOrder>>();
+		futures.add(future);
+		return futures;
 	}
 
 	@Override

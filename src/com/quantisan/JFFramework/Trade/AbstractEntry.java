@@ -1,5 +1,6 @@
 package com.quantisan.JFFramework.Trade;
 
+import java.util.List;
 import java.util.concurrent.Future;
 
 import com.dukascopy.api.IOrder;
@@ -21,7 +22,7 @@ public abstract class AbstractEntry implements ITag {
 		
 	protected IStop getStop() { return this.stop; }
 	
-	protected abstract Future<IOrder> enterPosition(Instrument instrument, 
+	protected abstract List<Future<IOrder>> enterPosition(Instrument instrument, 
 													Sentiment sentiment, 
 													double riskPct, 
 													String comment) throws JFException;

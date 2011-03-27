@@ -15,7 +15,7 @@ public abstract class AbstractCondition {
 	 * null if no next is set
 	 * @throws JFException
 	 */
-	protected Sentiment getNextSentiment(Instrument instrument, Period period) throws JFException
+	protected Sentiment getNextResult(Instrument instrument, Period period) throws JFException
 	{
 		if (next == null)	return null;
 		else return next.calculate(instrument, period);
