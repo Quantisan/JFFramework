@@ -13,7 +13,8 @@ public abstract class AbstractExposure implements ITag {
 	}
 	
 	// TODO filter out the correct tag
-	public abstract boolean isNewPositionAllowed(Instrument instrument) throws JFException;
+	public abstract boolean isNewPositionAllowed(String strategyTag, Instrument instrument) 
+													throws JFException;
 	
 	@Override public abstract String toString();
 }

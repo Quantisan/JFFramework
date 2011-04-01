@@ -24,7 +24,7 @@ public class NullExposure extends AbstractExposure {
 	}
 	
 	@Override
-	public boolean isNewPositionAllowed(Instrument instrument) {
+	public boolean isNewPositionAllowed(String strategyTag, Instrument instrument) {
 		return false;
 	}
 

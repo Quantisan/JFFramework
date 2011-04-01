@@ -56,9 +56,12 @@ public abstract class AbstractSetup implements ITag {
 										IBar askBar, 
 										IBar bidBar)  throws JFException;
 	
-	public List<Future<IOrder>> enterPosition(Instrument instrument, Sentiment sentiment, double riskPct) throws JFException 
+	public List<Future<IOrder>> enterPosition(Instrument instrument, 
+												Sentiment sentiment, 
+												double riskPct,
+												String strategyTag) throws JFException 
 	{
-		String comment = OrderCommentMaker.getComment(this, entry, stop, exit);	
+		String comment = OrderCommentMaker.getComment(strategyTag, this, entry, stop, exit);	
 		return entry.enterPosition(instrument, sentiment, riskPct, comment);
 	}
 	

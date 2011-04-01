@@ -16,19 +16,23 @@ public class OrderCommentReader {
 		return commr;
 	}
 	
-	public String getSetup() {
+	public String getStrategy() {
 		return texts[0];
 	}
 	
-	public String getEntry() {
+	public String getSetup() {
 		return texts[1];
 	}
 	
-	public String getStop() {
+	public String getEntry() {
 		return texts[2];
 	}
 	
-	public String getExit() {
+	public String getStop() {
 		return texts[3];
+	}
+	
+	public String getExit() {
+		return texts[4];
 	}
 }
