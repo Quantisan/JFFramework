@@ -4,6 +4,7 @@ import java.util.*;
 import com.dukascopy.api.*;
 import com.quantisan.JFFramework.Trade.*;
 import com.quantisan.JFUtil.*;
+import com.quantisan.JFValidation.JFValidate;
 
 /**
  * @author Paul Lam
@@ -13,38 +14,18 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	@Configurable("Instrument")
 		public Instrument defInst;
 	@Configurable("Risk Fraction per Trade (0.0, 1.0]") 
-		public double riskPct = 0.002;
+		public double riskPct = 0.0025;
 	@Configurable("Max. Drawdown Fraction (0.0, 1.0]") 
 		public double maxDD = 0.02;
-	@Configurable("Record post-hoc trade data on exit")
-		public boolean posthoc = false;
 	
 	private AbstractSetup setup;
+	private AbstractTakePoint takepoint;
 	private AbstractEmergency emergency;
 	private AbstractExposure exposure;
 
 	@Override
 	public abstract void onBar(Instrument instrument, Period period, IBar askBar,
 			IBar bidBar) throws JFException;
-//	{
-//		if (instrument != this.defInst)	{ return; }
-//		
-//		// TODO multi-thread emergency and exit
-//		emergency.checkEmergency(this, instrument, period);
-//		setup.checkPositions(instrument, period, askBar, bidBar);
-//		
-//		Sentiment sentiment = setup.calculate(instrument, period, askBar, bidBar);
-//		// TODO output sentiment assessment probability
-//
-//		if (period == Period.TICK 	// prevents multiple run on same tick for overlapping periods
-//				&& sentiment == this.defSentiment 
-//				&& sentiment != Sentiment.NEUTRAL 
-//				&& exposure.isNewPositionAllowed(instrument)) 
-//		{			
-//			Printer.println("calling entePosition / " + period);
-//			setup.enterPosition(instrument, sentiment, this.riskPct);
-//		}		
-//	}
 
 	@Override
 	public final void onStart(IContext context) throws JFException {
@@ -55,20 +36,21 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 		instSet.add(this.defInst);
 		Pairer.subscribeTransitionalInstruments(instSet);
 		
-		Printer.println("-- Disclaimer: use at your own risk --");	// TODO add full disclaimer	
-		Printer.println("-- " + this.toString() + " --");			
+		Printer.println("-- " + this.toString() + " --");
+		Printer.println("By using this software you are agreeing to be bound " +
+				"by the Quantisan Systems EULA as published at " +
+				"http://www.quantisan.com/eula");	
+					
 		
 		// TODO move validation check into class and expand on functionality
-		if (JForexContext.getEngine().getType() == IEngine.Type.DEMO ||
-				JForexContext.getEngine().getType() == IEngine.Type.TEST) {
-			// TODO add OR passed validation in IF statement
+		if (JFValidate.isLicensed()) {
 			Printer.println("Initialising ...");
 			this.initialize();
-			Printer.println("Pre-calculating dataset for " + this.defInst);
+			Printer.println("Pre-calculating matrices for " + this.defInst);
 			this.setup.initializeConditions(this.defInst);
 			Printer.println("Strategy running ...");
 		} else {
-			Printer.println("Failed initialising, bailing ...");
+			Printer.println("Failed validation, program crashing ...");
 		}
 		
 	}
@@ -91,36 +73,20 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 	 */
 	public void setSetup(AbstractSetup setup) {
 		this.setup = setup;
-		Printer.println("Trading setup: " + this.setup.toString());
+		Printer.println("Spinning the trading setup ...");
 	}
-
-//	/**
-//	 * @param entry the enter to set
-//	 */
-//	public void setEntry(AbsEntry entry) {
-//		this.entry = entry;
-//		Printer.println("Entry: " + this.entry.toString());
-//	}
-//
-//	/**
-//	 * @param orderManager the orderManager to set
-//	 */
-//	public void setExit(AbsExit exit) {
-//		this.exit = exit;
-//		Printer.println("Exit: " + this.exit.toString());
-//	}
 
 	/**
 	 * @param emergency the riskManager to set
 	 */
 	public void setEmergency(AbstractEmergency emergency) {
 		this.emergency = emergency;
-		Printer.println("Emergency exit: " + this.emergency.toString());
+		Printer.println("Implementing emergency exit ...");
 	}
 
 	public void setExposure(AbstractExposure exposure) {
 		this.exposure = exposure;
-		Printer.println("Exposure check: " + this.exposure.toString());
+		Printer.println("Aligning exposure check ...");
 	}
 
 	/**
@@ -135,6 +101,15 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 
 	public AbstractSetup getSetup() {
 		return setup;
+	}
+
+	public AbstractTakePoint getTakePoint() {
+		return takepoint;
+	}
+
+	public void setTakePoint(AbstractTakePoint takepoint) {
+		this.takepoint = takepoint;
+		Printer.println("Scouting take point location ...");
 	}
 
 	public AbstractEmergency getEmergency() {
@@ -153,12 +128,12 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 		return maxDD;
 	}
 	
-	/**
-	 * @return the posthoc
-	 */
-	protected boolean isPosthoc() {
-		return posthoc;
-	}
+//	/**
+//	 * @return the posthoc
+//	 */
+//	protected boolean isPosthoc() {
+//		return posthoc;
+//	}
 
 	@Override public abstract String toString();
 

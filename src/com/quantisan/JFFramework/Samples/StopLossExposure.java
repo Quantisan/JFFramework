@@ -8,7 +8,8 @@ import com.quantisan.JFFramework.Trade.OrderCommentReader;
 import com.quantisan.JFUtil.*;
 
 /**
- * Assumes there is always a stop loss to every order.
+ * Assumes there is always a stop loss to every order. 
+ * Only checks current instrument.
  * 
  * @author plam
  *

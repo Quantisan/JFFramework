@@ -10,7 +10,6 @@ import com.dukascopy.api.Period;
 import com.quantisan.JFFramework.Trade.AbstractExit;
 import com.quantisan.JFFramework.Trade.OrderCommentReader;
 import com.quantisan.JFUtil.JForexContext;
-import com.quantisan.JFUtil.Orderer;
 
 public class SimpleStepTrailingExit extends AbstractExit {
 	private int step;
