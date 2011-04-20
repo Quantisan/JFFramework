@@ -50,9 +50,9 @@ public abstract class AbstractSemiStrat implements IStrategy, ITag {
 			this.setup.initializeConditions(this.defInst);
 			Printer.println("Strategy running ...");
 		} else {
-			Printer.println("Failed validation, program crashing ...");
-		}
-		
+			Printer.println("Free trial QTD is only available for DEMO or backtesting");
+			throw new AssertionError("Failed license check");
+		}		
 	}
 
 	@Override
