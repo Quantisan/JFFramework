@@ -61,7 +61,11 @@ public abstract class AbstractSetup implements ITag {
 												double riskPct,
 												String strategyTag) throws JFException 
 	{
-		String comment = OrderCommentMaker.getComment(strategyTag, this, entry, stop, exit);	
+		String comment = OrderCommentMaker.getComment(strategyTag, 
+														this.getTag(), 
+														entry.getTag(), 
+														stop.getTag(), 
+														exit.getTag());	
 		return entry.enterPosition(instrument, sentiment, riskPct, comment);
 	}
 	

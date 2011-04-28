@@ -1,12 +1,10 @@
 package com.quantisan.JFValidation;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import com.quantisan.JFUtil.JForexContext;
 import com.quantisan.JFUtil.Printer;
 
 public final class LicenseKey {
@@ -49,11 +47,7 @@ public final class LicenseKey {
 		}
 	}
 
-	protected LicenseKey() throws FileNotFoundException {
-		File fileDir = JForexContext.getContext().getFilesDir();
-		String fileName = fileDir.toString() + File.separator + getKeyName();
-//		String fileName = getKeyName();
-		
+	protected LicenseKey(String fileName) throws FileNotFoundException {	
 		BufferedReader reader;
 
 		reader = new BufferedReader(new FileReader(fileName));			
@@ -74,15 +68,15 @@ public final class LicenseKey {
 		return keyFileName;
 	}	
 	
-	public static void main(String[] args) {
-		LicenseKey key = null;
-		try {
-			key = new LicenseKey();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		System.out.println(key.getMessageLine());
-		System.out.println(key.getInformation());
-		System.out.println(key.getSignature());
-	}
+//	public static void main(String[] args) {
+//		LicenseKey key = null;
+//		try {
+//			key = new LicenseKey(getKeyName());
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println(key.getMessageLine());
+//		System.out.println(key.getInformation());
+//		System.out.println(key.getSignature());
+//	}
 }

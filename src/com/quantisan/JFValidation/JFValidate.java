@@ -1,5 +1,6 @@
 package com.quantisan.JFValidation;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
@@ -15,14 +16,17 @@ import com.quantisan.JFUtil.JForexContext;
 public final class JFValidate {
 	private JFValidate() {};
 	
-	public static boolean isLicensed() {
-		if (checkType() || checkKey()) 
+	public final static boolean isLicensed() {
+		File fileDir = JForexContext.getContext().getFilesDir();
+		String fileName = fileDir.toString() + File.separator + LicenseKey.getKeyName();
+		
+		if (checkType() || checkKey(fileName)) 
 		{
 			return true;
 		} else { return false; }
 	}
 	
-	private static boolean checkType() {
+	private final static boolean checkType() {
 		IEngine.Type type = JForexContext.getEngine().getType();		
 		if (type == IEngine.Type.DEMO || type == IEngine.Type.TEST) 
 		{
@@ -30,10 +34,10 @@ public final class JFValidate {
 		} else { return false; }
 	}
 	
-	private static boolean checkKey() {
+	final static boolean checkKey(String fileName) {
 		LicenseKey key;
 		try {
-			key = new LicenseKey();
+			key = new LicenseKey(fileName);
 		} catch (FileNotFoundException e) {
 			return false;
 		}
@@ -52,8 +56,4 @@ public final class JFValidate {
 		
 		return isHashOK && isSigOK;
 	}
-//	
-//	public static void main(String[] args) {
-//		System.out.println(checkKey());
-//	}
 }

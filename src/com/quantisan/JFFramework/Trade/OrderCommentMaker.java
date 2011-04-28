@@ -4,17 +4,17 @@ public class OrderCommentMaker {
 	private OrderCommentMaker() {}
 	
 	public static String getComment(String strategyTag,
-									AbstractSetup setup, 
-									AbstractEntry entry,
-									IStop stop,
-									AbstractExit exit) 
+									String setupTag, 
+									String entryTag,
+									String stopTag,
+									String exitTag) 
 	{
 		char split = ';';
 		String label = strategyTag;
-		label += split + setup.getTag();
-		label += split + entry.getTag();
-		label += split + stop.getTag();
-		label += split + exit.getTag();
+		label += split + setupTag;
+		label += split + entryTag;
+		label += split + stopTag;
+		label += split + exitTag;
 		label.replaceAll(" ", "");
 		
 		return label;
